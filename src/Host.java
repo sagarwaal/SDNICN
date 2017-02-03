@@ -1,3 +1,4 @@
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,6 +11,7 @@ public class Host {
 	
 	Socket switchSocket;
 	ServerSocket listenSocket;
+	
 	
 	
 	public Host(String host,int port)
@@ -38,11 +40,30 @@ public class Host {
 		pkt.setType(MsgType.PUBLISH);
 		pkt.setData(filename);
 		
-		
-		
+		DataOutputStream dout;
+		try {
+			dout = new DataOutputStream(switchSocket.getOutputStream());
+			dout.write(Serializer.serialize(pkt));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 	}
+	
+	
+	public void putFile(String uri, String path )
+	{
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
