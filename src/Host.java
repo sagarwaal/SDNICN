@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 
 public class Host {
@@ -12,6 +13,8 @@ public class Host {
 	Socket switchSocket;
 	ServerSocket listenSocket;
 	
+	DatabaseHandler db;
+	DataOutputStream switchDout;
 	
 	
 	public Host(String host,int port)
@@ -20,7 +23,9 @@ public class Host {
 			switchSocket=new Socket(host,port);
 			listenSocket=new ServerSocket(HOST_PORT);
 			
-			
+			switchDout=new DataOutputStream(switchSocket.getOutputStream());
+			db=new DatabaseHandler();
+		
 			
 			
 		} catch (UnknownHostException e) {
@@ -30,6 +35,9 @@ public class Host {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		publishAll();
+		
 	}
 	
 	
@@ -40,10 +48,11 @@ public class Host {
 		pkt.setType(MsgType.PUBLISH);
 		pkt.setData(filename);
 		
-		DataOutputStream dout;
+		
 		try {
-			dout = new DataOutputStream(switchSocket.getOutputStream());
-			dout.write(Serializer.serialize(pkt));
+			
+			switchDout.write(Serializer.serialize(pkt));
+			switchDout.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,13 +62,29 @@ public class Host {
 	}
 	
 	
-	public void putFile(String uri, String path )
+	public void putFile(String name, String path )
+	{
+		db.addFile(name, path);
+		publish(name);
+	}
+	
+	public void getFile(String name)
 	{
 		
 	}
 	
 	
-	
+	public void publishAll()
+	{
+		ArrayList<String> fileList=db.getFileList();
+		
+		for(int i=0;i<fileList.size();i++)
+		{
+			publish(fileList.get(i));
+		}
+		
+		
+	}
 	
 	
 	

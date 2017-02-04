@@ -1,4 +1,5 @@
 import java.sql.* ;
+import java.util.ArrayList;
 
 public class DatabaseHandler {
 	
@@ -53,9 +54,33 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public void getFileList()
+	public ArrayList<String> getFileList()
 	{
-	
+		ArrayList<String> fileList= new ArrayList<String>() ;
+		
+		String sql="Select name from HOSTTABLE ";
+		
+		ResultSet rs;
+		
+		try{
+		Statement st=conn.createStatement();
+		rs=st.executeQuery(sql);
+		while(rs.next())
+		{
+			fileList.add(rs.getString("name"));
+			
+		}
+		
+		
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+		return fileList;
+		
 	}
 	
 	
