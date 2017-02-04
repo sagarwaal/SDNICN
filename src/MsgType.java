@@ -3,7 +3,9 @@ public enum MsgType {
 	REQUEST,
 	REPLY,
 	INTEREST,
-	PUBLISH
+	PUBLISH,
+	NOTFOUND,
+	SUCCESS
 	
 	
 

@@ -68,8 +68,9 @@ public class Host {
 		publish(name);
 	}
 	
-	public void getFile(String name)
+	public void getFile(String name,String path)
 	{
+		
 		
 	}
 	
