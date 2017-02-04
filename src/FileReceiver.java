@@ -62,6 +62,7 @@ public class FileReceiver implements Runnable {
 			{
 				flag=false;
 				sk.close();
+				System.out.println("Error: File "+filename+" not received");
 				return;
 				
 			}
@@ -81,6 +82,8 @@ public class FileReceiver implements Runnable {
 			
 			sk.close();
 			flag=true;
+			
+			System.out.println("File: "+filename+" successfully received");
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block

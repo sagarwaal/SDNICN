@@ -15,12 +15,17 @@ public class Host {
 	
 	DatabaseHandler db;
 	DataOutputStream switchDout;
+	String switchIp;
+	int switchPort;
 	
 	
-	public Host(String host,int port)
+	public Host(String ip,int port)
 	{
+		switchIp=ip;
+		switchPort=port;
+		
 		try {
-			switchSocket=new Socket(host,port);
+			switchSocket=new Socket(ip,port);
 			listenSocket=new ServerSocket(HOST_PORT);
 			
 			switchDout=new DataOutputStream(switchSocket.getOutputStream());
@@ -65,13 +70,16 @@ public class Host {
 	public void putFile(String name, String path )
 	{
 		db.addFile(name, path);
+		
 		publish(name);
 	}
 	
 	public void getFile(String name,String path)
 	{
+		FileReceiver fr= new FileReceiver(name, path, switchIp, switchPort);
 		
-		
+		Thread th= new Thread(fr);
+		th.start();
 	}
 	
 	
