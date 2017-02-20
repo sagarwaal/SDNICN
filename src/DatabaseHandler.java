@@ -84,6 +84,11 @@ public class DatabaseHandler {
 	}
 	
 	
+	public String getFilePath(String filename)
+	{
+		return null;
+	}
+	
 	
 	
 	
