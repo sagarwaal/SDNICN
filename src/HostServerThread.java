@@ -3,14 +3,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class HostThread implements Runnable {
+public class HostServerThread implements Runnable {
 	
 	int serverPort;
 	protected boolean isStopped = false;
     protected Thread runningThread= null;
 	
 	ServerSocket sk=null;
-	public HostThread(int port)
+	public HostServerThread(int port)
 	{
 		serverPort=port;
 		
