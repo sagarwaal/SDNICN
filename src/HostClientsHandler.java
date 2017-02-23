@@ -31,7 +31,7 @@ public class HostClientsHandler implements Runnable{
 					
 					case INTEREST :
 						
-						//string filepath 
+						String filepath = DatabaseHandler.getFilePath(pkt.data);
 						
 						break;
 						

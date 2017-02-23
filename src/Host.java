@@ -1,9 +1,17 @@
+/* 
+ * check database for all files, publish their name,
+ * start HostServer thread to listen file requests 
+ */
+
+
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
 
 
 public class Host {
@@ -13,7 +21,7 @@ public class Host {
 	Socket switchSocket;
 	ServerSocket listenSocket;
 	
-	DatabaseHandler db;
+	
 	DataOutputStream switchDout;
 	String switchIp;
 	int switchPort;
@@ -29,7 +37,6 @@ public class Host {
 			listenSocket=new ServerSocket(HOST_PORT);
 			
 			switchDout=new DataOutputStream(switchSocket.getOutputStream());
-			db=new DatabaseHandler();
 		
 			
 			
@@ -69,7 +76,7 @@ public class Host {
 	
 	public void putFile(String name, String path )
 	{
-		db.addFile(name, path);
+		DatabaseHandler.addFile(name, path);
 		
 		publish(name);
 	}
@@ -85,7 +92,7 @@ public class Host {
 	
 	public void publishAll()
 	{
-		ArrayList<String> fileList=db.getFileList();
+		ArrayList<String> fileList=DatabaseHandler.getFileList();
 		
 		for(int i=0;i<fileList.size();i++)
 		{
