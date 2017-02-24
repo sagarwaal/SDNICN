@@ -1,3 +1,4 @@
+package host;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileOutputStream;
@@ -7,13 +8,16 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import util.MsgType;
+import util.Packet;
+
 
 public class FileReceiver implements Runnable {
-	String filename;
-	String path;
-	String switchName;
-	int switchPort;
-	boolean flag;
+	private String filename;
+	private String path;
+	private String switchName;
+	private int switchPort;
+	private boolean flag;
 	
 	public  FileReceiver(String filename, String path, String switchName, int switchPort ) {
 		// TODO Auto-generated constructor stub
@@ -34,8 +38,8 @@ public class FileReceiver implements Runnable {
 			Socket sk= new Socket(switchName,switchPort);
 			
 			Packet pkt= new Packet();
-			pkt.setType(MsgType.INTEREST);
-			pkt.setData(filename);
+			pkt.type=MsgType.INTEREST;
+			pkt.data=filename;
 			
 			
 			
@@ -92,6 +96,11 @@ public class FileReceiver implements Runnable {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public boolean isFileReceived()
+	{
+		return flag;
 	}
 	
 

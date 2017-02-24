@@ -1,3 +1,4 @@
+package host;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,17 +31,21 @@ public class HostServerThread implements Runnable {
 	public void run() {
 		
 		openServerSocket();
-		
+		Socket clientSocket;
 		while(true)
 		{
+			
 			try {
-				Socket clientSocket = sk.accept();
-				
-				
+				clientSocket = sk.accept();
+				new HostClientsHandler(clientSocket).run(); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
+			
+				
+				
+			
 		}
 		
 		

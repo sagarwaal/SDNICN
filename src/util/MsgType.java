@@ -1,3 +1,4 @@
+package util;
 
 public enum MsgType {
 	REQUEST,
