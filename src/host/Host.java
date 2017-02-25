@@ -43,10 +43,13 @@ public class Host {
 	{
 		try {
 			switchSocket=new Socket(switchIp,switchPort);
-			serverThread=new HostServerThread(HOST_PORT); //start server thread
-			serverThread.run();
-			
+			serverThread=new HostServerThread(HOST_PORT); 
 			switchOout=new ObjectOutputStream(switchSocket.getOutputStream());
+			
+			Thread th= new Thread(serverThread);
+			th.start();
+			
+			
 		
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
