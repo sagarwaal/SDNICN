@@ -1,8 +1,12 @@
 package util;
 
 
-public class Packet {
+public class Packet implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	public MsgType type;
 	public String data;
