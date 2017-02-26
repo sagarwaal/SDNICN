@@ -8,6 +8,17 @@ public class Packet {
 	public String data;
 	public String addr;
 	
+	public Packet()
+	{
+		
+	}
+	
+	public Packet(MsgType type, String data)
+	{
+		this.type=type;
+		this.data=data;
+	}
+	
 	public String getId() {
 		return id;
 	}
