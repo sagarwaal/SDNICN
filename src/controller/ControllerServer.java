@@ -33,6 +33,8 @@ public class ControllerServer implements Runnable{
 		{
 			try {
 				clientSocket=sk.accept();
+				Thread th=new Thread(new ControllerClientsHandler(clientSocket, controller));
+				th.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

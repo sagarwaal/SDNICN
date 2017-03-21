@@ -4,21 +4,26 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import util.ContentInfo;
 
 
 public class Controller {
 	
-	HashMap<String,List<ContentInfo>> map;
+	ConcurrentHashMap<String,List<ContentInfo>> map;
 	
-	HashSet<String> delAddr;                    //to store deleted nodes
+	Set<String> delAddr;   //to store deleted nodes
+	
 	
 	
 	public Controller()
 	{
-		map=new HashMap<String,List<ContentInfo>>();
-		delAddr=new HashSet<String>();
+		map=new ConcurrentHashMap<String,List<ContentInfo>>();
+		//delAddr=new HashSet<String>();
+		
+		delAddr=ConcurrentHashMap.newKeySet();
 		
 	}
 	
@@ -27,17 +32,13 @@ public class Controller {
 	{
 		
 		if(delAddr.contains(switchAddr))
-				delAddr.remove(switchAddr);
+			delAddr.remove(switchAddr);
+	
 		
 		if(delAddr.contains(hostAddr))
-				delAddr.remove(hostAddr);
+			delAddr.remove(hostAddr);
 		
-		
-		if(!map.containsKey(content))
-		{
-			map.put(content, new LinkedList<ContentInfo>() );
-		}
-		
+		map.putIfAbsent(content,new LinkedList<ContentInfo>());
 		map.get(content).add(new ContentInfo(switchAddr,hostAddr));
 	
 	}
@@ -82,7 +83,5 @@ public class Controller {
 			
 		return null;
 	}
-	
-	
 	
 }
