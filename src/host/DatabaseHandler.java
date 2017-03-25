@@ -38,48 +38,7 @@ public class DatabaseHandler {
 	
 	public DatabaseHandler()
 	{
-		
-		PoolProperties p = new PoolProperties();
-		
-		p.setUrl(CONN_URI);
-		p.setDriverClassName(DRIVER_CLASS_NAME);
-		p.setInitialSize(10);
-		
-		
-		ds.setPoolProperties(p);
-		
-		
-		
-		try {
-		
-			
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-		
-		try {
-			conn=DriverManager.getConnection("jdbc:sqlite:host.db");
-			
-			Statement st= conn.createStatement();
-			String sql= "CREATE TABLE IF NOT EXISTS HOSTTABLE "+
-						"(NAME VARCHAR(250) , PATH VARCHAR(250)" +
-						")";
-			
-			st.executeUpdate(sql);
-			st.close();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	
-		
+		initialize();
 	}
 	
 	public static void createTable()  //correct try-catch block
@@ -146,6 +105,7 @@ public class DatabaseHandler {
 		Connection con=ds.getConnection();
 		Statement st=con.createStatement();
 		rs=st.executeQuery(sql);
+		
 		while(rs.next())
 		{
 			fileList.add(rs.getString("name"));
