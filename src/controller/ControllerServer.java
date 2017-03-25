@@ -17,6 +17,7 @@ public class ControllerServer implements Runnable{
 		
 		try {
 			sk=new ServerSocket(port);
+			System.out.println("Controller started on "+sk.getInetAddress()+":"+sk.getLocalPort());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,6 +34,7 @@ public class ControllerServer implements Runnable{
 		{
 			try {
 				clientSocket=sk.accept();
+				System.out.println("Switch connected "+clientSocket.getRemoteSocketAddress());
 				Thread th=new Thread(new ControllerClientsHandler(clientSocket, controller));
 				th.start();
 			} catch (IOException e) {

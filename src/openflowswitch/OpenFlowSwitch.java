@@ -1,5 +1,7 @@
 package openflowswitch;
 
+import util.ListeningPorts;
+
 public class OpenFlowSwitch {
 	
 	
@@ -10,15 +12,13 @@ public class OpenFlowSwitch {
 	int controllerPort;
 	int switchPort;
 	
-	public OpenFlowSwitch(String controllerIp,int controllerPort, int switchPort )
+	public OpenFlowSwitch(String controllerIp,int controllerPort)
 	{
 		this.controllerIp=controllerIp;
 		this.controllerPort=controllerPort;
-		this.switchPort=switchPort;
+		this.switchPort=ListeningPorts.SWITCH_PORT;
 		initialize();
-		
 		new Thread(server).start(); 
-		
 	}
 	
 	public void initialize()

@@ -1,22 +1,26 @@
 package controller;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import util.ContentInfo;
+import util.ListeningPorts;
 
 
+/**
+ * @author sagar
+ *
+ */
 public class Controller {
 	
-	ConcurrentHashMap<String,List<ContentInfo>> map;
+	private ConcurrentHashMap<String,List<ContentInfo>> map;
 	
-	Set<String> delAddr;   //to store deleted nodes
+	private Set<String> delAddr;   //to store deleted nodes
 	
-	
+	private TopologyManager manager;
 	
 	public Controller()
 	{
@@ -24,7 +28,17 @@ public class Controller {
 		//delAddr=new HashSet<String>();
 		
 		delAddr=ConcurrentHashMap.newKeySet();
+		manager=new TopologyManager();
 		
+		Thread th=new Thread(new ControllerServer(ListeningPorts.CONTROLLER_PORT,this));
+		th.start();
+		
+	}
+	
+	
+	public TopologyManager getManager()
+	{
+		return manager;
 	}
 	
 	
@@ -50,7 +64,7 @@ public class Controller {
 	
 	
 	
-	public ContentInfo getContent(String content)
+	public List<ContentInfo> getContent(String content)
 	{
 		if(!map.containsKey(content))
 			return null;
@@ -59,29 +73,15 @@ public class Controller {
 		
 		ContentInfo info;
 		
-		
-		/*
-		 * if content is present, get first contentInfo, if its addr is not in deleted addresses set
-		 * remove from first and add at last.(this will distribute load)
-		 * 
-		 * if addr of contentInfo is in delAddr list just delete it from list
-		 */
-		
-		
-		while(!l.isEmpty())
+		for(Iterator<ContentInfo> iter=l.iterator();iter.hasNext();)
 		{
-			info=(ContentInfo)l.get(0);
-			l.remove(0);
-			
+			info=iter.next();
 			if(!(delAddr.contains(info.getSwitchAddr()) || delAddr.contains(info.getHostAddr())))
 			{
-				l.add(info); 
-				return info;
+				iter.remove();
 			}
-		
 		}
-			
-		return null;
+		return l;
 	}
 	
 }
