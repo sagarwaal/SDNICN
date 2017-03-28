@@ -15,6 +15,7 @@ public class SwitchServerThread implements Runnable{
 		// TODO Auto-generated constructor stub
 		serverPort=port;
 		cHandler=cH;
+		
 	}
 	
 	public void openServerSocket()
@@ -37,6 +38,7 @@ public class SwitchServerThread implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		openServerSocket();
+		System.out.println("Switch Server thread started "+sk.getLocalPort());
 		Socket clientSocket;
 		while(true)
 		{

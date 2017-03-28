@@ -23,6 +23,7 @@ public class ControllerHandler {
 		controllerIp=ip;
 		controllerPort=port;
 		initialize();
+		System.out.println("Initialization of switch controller connection completed");
 		sharedLock=new Object();
 	}
 	
@@ -34,8 +35,11 @@ public class ControllerHandler {
 	{
 		try {
 			controllerSocket=new Socket(controllerIp,controllerPort);
-			oin=new ObjectInputStream(controllerSocket.getInputStream());
+			System.out.println("Switch connected to controller "+controllerSocket.getLocalPort());
 			oout=new ObjectOutputStream(controllerSocket.getOutputStream());
+			oout.flush();
+			oin=new ObjectInputStream(controllerSocket.getInputStream());
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,6 +68,23 @@ public class ControllerHandler {
 		
 		return recvMsg;
 	}
+	
+	protected void finalize() throws Throwable
+	{
+		
+		try{
+			oout.close();
+			oin.close();
+			controllerSocket.close();
+		}
+		finally
+		{
+			super.finalize();
+		}
+		
+	}
+	
+	
 	
 	
 	

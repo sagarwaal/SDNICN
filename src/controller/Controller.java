@@ -44,7 +44,7 @@ public class Controller {
 	
 	public void addContent(String content,String switchAddr, String hostAddr)
 	{
-		
+		System.out.println("Publishing file " +content+ " Switch-"+switchAddr+" host-"+hostAddr);
 		if(delAddr.contains(switchAddr))
 			delAddr.remove(switchAddr);
 	

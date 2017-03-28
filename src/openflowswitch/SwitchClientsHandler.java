@@ -27,7 +27,7 @@ public class SwitchClientsHandler implements Runnable{
 		this.sk=sk;
 		cHandler=cH;
 		initializeStreams();
-		hostAddr=sk.getRemoteSocketAddress().toString();
+		hostAddr=sk.getInetAddress().toString();
 		
 	}
 	
@@ -160,7 +160,7 @@ public class SwitchClientsHandler implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		
-		while(true)
+		while(sk.isConnected())
 		{
 			try {
 				Packet pkt=(Packet)oin.readObject();

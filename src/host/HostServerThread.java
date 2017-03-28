@@ -21,6 +21,7 @@ public class HostServerThread implements Runnable {
 	{
 		try {
 			sk=new ServerSocket(serverPort);
+			System.out.println("Host server thread started "+sk.getInetAddress());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,6 +38,7 @@ public class HostServerThread implements Runnable {
 			
 			try {
 				clientSocket = sk.accept();
+				System.out.println("New connection from "+clientSocket.getRemoteSocketAddress());
 				new Thread(new HostClientsHandler(clientSocket)).start(); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

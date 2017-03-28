@@ -9,7 +9,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import util.ListeningPorts;
 import util.MsgType;
 import util.Packet;
 
@@ -17,7 +19,6 @@ import util.Packet;
 
 public class Host {
 	
-	final int HOST_PORT=9695;
 	
 	Socket switchSocket;
 	
@@ -37,13 +38,25 @@ public class Host {
 		initialize();
 		publishAll();
 		
+		
+		
 	}
+	
+	public void handleUsers()
+	{
+		Scanner sc=new Scanner(System.in);
+		
+		
+		
+	}
+	
+	
 	
 	public void initialize()
 	{
 		try {
 			switchSocket=new Socket(switchIp,switchPort);
-			serverThread=new HostServerThread(HOST_PORT); 
+			serverThread=new HostServerThread(ListeningPorts.HOST_PORT); 
 			switchOout=new ObjectOutputStream(switchSocket.getOutputStream());
 			
 			Thread th= new Thread(serverThread);

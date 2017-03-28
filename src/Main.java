@@ -35,7 +35,41 @@ public class Main{
 		{
 			System.out.println("Enter ip of switch");
 			String ip=sc.next();
-			new Host(ip,ListeningPorts.SWITCH_PORT);
+			Host h=new Host(ip,ListeningPorts.SWITCH_PORT);
+			
+			while(true)
+			{
+				System.out.println("Choose\n1) Publish File\n2) Receive File");
+				String name,path;
+				switch(sc.nextInt())
+				{
+					case 1:
+						System.out.println("Enter path");
+						path=sc.next();
+						System.out.println("Enter name to be published");
+						name=sc.next();
+						h.putFile(name, path);
+						break;
+					
+					case 2:
+						System.out.println("Enter filename");
+						name=sc.next();
+						System.out.println("Enter path to store");
+						path=sc.next();
+						
+						h.getFile(name, path);
+						break;
+					
+					default:
+						System.out.println("Invalid option");
+						
+					
+				
+				}
+			}
+			
+			
+			
 		}
 		
 		public static void launchController()

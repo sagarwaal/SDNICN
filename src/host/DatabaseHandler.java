@@ -9,6 +9,7 @@ public class DatabaseHandler {
 	
 	private static final String CONN_URI="jdbc:sqlite:host.db" ;
 	private static final String DRIVER_CLASS_NAME="org.sqlite.JDBC";
+
 	
 	private static DataSource ds;
 	
@@ -21,13 +22,13 @@ public class DatabaseHandler {
 		p.setInitialSize(10);
 		
 		
-		synchronized (ds){
+		
 			if(ds==null){
 				ds=new DataSource();
 				ds.setPoolProperties(p);
 			}
 			
-		}
+		
 		createTable();
 		
 	}
@@ -44,7 +45,7 @@ public class DatabaseHandler {
 	public static void createTable()  //correct try-catch block
 	{
 		Connection con=null;
-		String sql= "CREATE IF NOT EXISTS HOSTTABLE "+
+		String sql= "CREATE TABLE IF NOT EXISTS HOSTTABLE "+
 				"(NAME VARCHAR(250) , PATH VARCHAR(250)" +
 				")";
 		try {

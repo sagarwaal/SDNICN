@@ -36,8 +36,11 @@ public class HostClientsHandler implements Runnable{
 		try {
 			din=new DataInputStream(connSocket.getInputStream());
 			dout=new DataOutputStream(connSocket.getOutputStream());
-			oin=new ObjectInputStream(connSocket.getInputStream());
+			
 			oout=new ObjectOutputStream(connSocket.getOutputStream());
+			oout.flush();
+			oin=new ObjectInputStream(connSocket.getInputStream());
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

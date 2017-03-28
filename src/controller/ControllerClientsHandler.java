@@ -19,7 +19,8 @@ public class ControllerClientsHandler implements Runnable {
 	public ControllerClientsHandler(Socket sk,Controller controller)
 	{
 		this.sk=sk;
-		switchAddr=sk.getRemoteSocketAddress().toString();
+	
+		switchAddr=sk.getInetAddress().toString();
 		this.controller=controller;
 		
 		try {
@@ -33,8 +34,10 @@ public class ControllerClientsHandler implements Runnable {
 	
 	public void initializeStreams() throws IOException
 	{
-		oin=new ObjectInputStream(sk.getInputStream());
 		oout=new ObjectOutputStream(sk.getOutputStream());
+		oout.flush();
+		oin=new ObjectInputStream(sk.getInputStream());
+		
 	}
 	
 	
@@ -68,7 +71,7 @@ public class ControllerClientsHandler implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
-		while(true)
+		while(sk.isConnected())
 		{
 			try {
 				Packet pkt=(Packet) oin.readObject();
