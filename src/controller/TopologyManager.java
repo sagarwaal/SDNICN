@@ -3,6 +3,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import util.ContentInfo;
+import util.ListeningPorts;
 public class TopologyManager {
 
 	
@@ -28,12 +29,12 @@ public class TopologyManager {
 			info=iter.next();
 			
 			if(info.getSwitchAddr()==switchAddr)
-				return info.getHostAddr();
+				return info.getHostAddr()+":"+ListeningPorts.HOST_PORT;
 		}
 		
 		
 		
-		return nodes.get(0).getSwitchAddr();
+		return nodes.get(0).getSwitchAddr()+":"+ListeningPorts.SWITCH_PORT;
 	}
 	
 	

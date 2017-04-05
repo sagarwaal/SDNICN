@@ -20,7 +20,7 @@ public class ControllerClientsHandler implements Runnable {
 	{
 		this.sk=sk;
 	
-		switchAddr=sk.getInetAddress().toString();
+		switchAddr=sk.getInetAddress().getHostAddress();
 		this.controller=controller;
 		
 		try {
@@ -54,7 +54,9 @@ public class ControllerClientsHandler implements Runnable {
 		Packet repPkt=new Packet();
 		
 		repPkt.type=(addr==null)?MsgType.NOTFOUND:MsgType.SUCCESS ;
-		repPkt.data=(addr==null)?null:addr;
+		repPkt.data=(addr==null)?null:addr.split(":")[1];
+		repPkt.addr=(addr==null)?null:addr.split(":")[0];
+		
 		
 		oout.writeObject(repPkt);
 		oout.flush();

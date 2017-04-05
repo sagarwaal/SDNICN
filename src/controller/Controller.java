@@ -76,10 +76,10 @@ public class Controller {
 		for(Iterator<ContentInfo> iter=l.iterator();iter.hasNext();)
 		{
 			info=iter.next();
-			if(!(delAddr.contains(info.getSwitchAddr()) || delAddr.contains(info.getHostAddr())))
+			/*if(!(delAddr.contains(info.getSwitchAddr()) || delAddr.contains(info.getHostAddr())))
 			{
 				iter.remove();
-			}
+			}*/
 		}
 		return l;
 	}

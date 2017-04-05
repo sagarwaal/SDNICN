@@ -27,15 +27,17 @@ public class SwitchClientsHandler implements Runnable{
 		this.sk=sk;
 		cHandler=cH;
 		initializeStreams();
-		hostAddr=sk.getInetAddress().toString();
+		hostAddr=sk.getInetAddress().getHostAddress();
 		
 	}
 	
 	public void initializeStreams()
 	{
 		try {
-			oin=new ObjectInputStream(sk.getInputStream());
 			oout=new ObjectOutputStream(sk.getOutputStream());
+			oout.flush();
+			oin=new ObjectInputStream(sk.getInputStream());
+			
 			din=new DataInputStream(sk.getInputStream());
 			dout=new DataOutputStream(sk.getOutputStream());
 		} catch (IOException e) {
