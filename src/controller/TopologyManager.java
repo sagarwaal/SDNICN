@@ -28,7 +28,7 @@ public class TopologyManager {
 		{
 			info=iter.next();
 			
-			if(info.getSwitchAddr()==switchAddr)
+			if(info.getSwitchAddr().compareTo(switchAddr)==0)
 				return info.getHostAddr()+":"+ListeningPorts.HOST_PORT;
 		}
 		

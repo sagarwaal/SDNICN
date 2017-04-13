@@ -130,11 +130,14 @@ public class SwitchClientsHandler implements Runnable{
 		}
 		else
 		{
-			byte[] arr = new byte[1024*1024];
+			oout.writeObject(new Packet(MsgType.SUCCESS,null));
+			oout.flush();
+			
+			byte[] arr = new byte[16*1024];
 			
 			int n;
 			
-			while((n=host_din.read(arr))!=-1)
+			while((n=host_din.read(arr))>0)
 			{
 				dout.write(arr,0,n);
 			}
