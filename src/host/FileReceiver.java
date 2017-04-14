@@ -1,6 +1,4 @@
 package host;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -64,37 +62,55 @@ public class FileReceiver implements Runnable {
 			if(recvPkt==null || recvPkt.type!=MsgType.SUCCESS)
 			{
 				flag=false;
+				oout.close();
 				sk.close();
 				System.out.println("Error: File "+filename+" not received");
 				return;
 				
 			}
 			
-			DataInputStream din =new DataInputStream(new BufferedInputStream(sk.getInputStream()));
+			//DataInputStream din =new DataInputStream(new BufferedInputStream(sk.getInputStream()));
 			
 			FileOutputStream fos = new FileOutputStream(path);
 			
-			byte[] arr = new byte[1024*1024];
+			byte[] arr=new byte[1024];
 			
-			int n;
-			while((n=din.read(arr))!=-1)
-			{
-				fos.write(arr,0,n);
+			long size=Integer.parseInt(recvPkt.data);
+			long chunks= size/1024;
+			int lastChunk=(int)(size-(chunks*1024));
+			for (long i = 0; i < chunks; i++) {
+			    oin.read(arr);
+			    fos.write(arr);
 			}
 			
+			oin.read(arr,0,lastChunk);
+			
+			fos.write(arr);
+			
+			
 			fos.close();
+			oout.close();
 			sk.close();
+			
+			
+						
+		
 			flag=true;
+			System.out.println("File: "+filename+" (Size:"+size+") successfully received");
 			
-			System.out.println("File: "+filename+" successfully received");
 			
-		} catch (UnknownHostException e) {
+			
+			
+			
+	} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
+		
+		
 		
 	}
 	

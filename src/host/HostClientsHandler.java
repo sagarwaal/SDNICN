@@ -1,6 +1,4 @@
 package host;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,8 +18,6 @@ public class HostClientsHandler implements Runnable{
 	private Socket connSocket;
 	private ObjectInputStream oin;
 	private ObjectOutputStream oout;
-	private DataInputStream din;
-	private DataOutputStream dout;
 	private InputStream in;
 	
 	
@@ -34,8 +30,7 @@ public class HostClientsHandler implements Runnable{
 	public void initializeStreams()
 	{
 		try {
-			din=new DataInputStream(connSocket.getInputStream());
-			dout=new DataOutputStream(connSocket.getOutputStream());
+			
 			
 			oout=new ObjectOutputStream(connSocket.getOutputStream());
 			oout.flush();
@@ -71,9 +66,6 @@ public class HostClientsHandler implements Runnable{
 	{
 		
 		try {
-			din.close();
-			dout.close();
-			oin.close();
 			oout.close();
 			connSocket.close();
 		} catch (IOException e) {
@@ -106,6 +98,7 @@ public class HostClientsHandler implements Runnable{
 	
 	public void sendfile(String filename)
 	{
+		System.out.println("Request for file "+filename);
 		String filepath = DatabaseHandler.getFilePath(filename);
 		Path path=Paths.get(filepath);
 		
@@ -157,9 +150,16 @@ public class HostClientsHandler implements Runnable{
 		byte[] bytes = new byte[16 * 1024];
 		
 		while ((count = in.read(bytes)) > 0) {
-            dout.write(bytes, 0, count);
+            oout.write(bytes, 0, count);
         }
-		dout.flush();
+		in.close();
+		System.out.println("File send");
+	}
+	
+	protected void finalize() throws Throwable
+	{
+		closeStreams();
+		super.finalize();
 	}
 	
 

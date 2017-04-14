@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,7 +26,12 @@ public class ControllerClientsHandler implements Runnable {
 		
 		try {
 			initializeStreams();
-		} catch (IOException e) {
+		}
+		catch(EOFException e)
+		{
+			
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -40,6 +46,13 @@ public class ControllerClientsHandler implements Runnable {
 		
 	}
 	
+	public void closeStreams() throws EOFException,IOException
+	{
+		
+		//oout.close();
+		oin.close();
+		sk.close();
+	}
 	
 	
 	public void handlePublishPackets(Packet pkt)
@@ -91,11 +104,25 @@ public class ControllerClientsHandler implements Runnable {
 				}
 				
 				
-			} catch (ClassNotFoundException | IOException e) {
+			}catch(EOFException e)
+			{
+				System.err.append("Connection lost with client "+sk.getInetAddress().getHostAddress()+"\n");
+				controller.delNode(switchAddr);
+				break;
+			}
+			
+			catch (ClassNotFoundException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				controller.delNode(switchAddr);
+				break;
 			}
+		}
+		
+		try {
+			closeStreams();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}

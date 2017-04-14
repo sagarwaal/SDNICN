@@ -1,7 +1,6 @@
 package openflowswitch;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,8 +17,8 @@ public class SwitchClientsHandler implements Runnable{
 	String hostAddr;
 	ObjectInputStream oin;
 	ObjectOutputStream oout;
-	DataInputStream din;
-	DataOutputStream dout;
+	//DataInputStream din;
+	//DataOutputStream dout;
 	ControllerHandler cHandler;
 	
 	public SwitchClientsHandler(Socket sk, ControllerHandler cH) {
@@ -38,9 +37,12 @@ public class SwitchClientsHandler implements Runnable{
 			oout.flush();
 			oin=new ObjectInputStream(sk.getInputStream());
 			
-			din=new DataInputStream(sk.getInputStream());
-			dout=new DataOutputStream(sk.getOutputStream());
-		} catch (IOException e) {
+			
+		}catch(EOFException e)
+		{
+			
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -76,7 +78,7 @@ public class SwitchClientsHandler implements Runnable{
 		
 	}
 	
-	public void handleInterestPacket(Packet pkt) throws ClassNotFoundException, IOException
+	public void handleInterestPacket(Packet pkt) throws ClassNotFoundException,EOFException, IOException
 	{
 		Packet p= new Packet();
 		p.type=MsgType.INTEREST;
@@ -109,13 +111,14 @@ public class SwitchClientsHandler implements Runnable{
 		
 	}
 	
-	public void recvAndFwdFile(String hostAddr, int hostPort, String filename) throws UnknownHostException, IOException, ClassNotFoundException
+	public void recvAndFwdFile(String hostAddr, int hostPort, String filename) throws UnknownHostException,EOFException, IOException, ClassNotFoundException
 	{
 		Socket host_sk=new Socket(hostAddr,hostPort);
-		ObjectInputStream host_oin=new ObjectInputStream(host_sk.getInputStream());
 		ObjectOutputStream host_oout=new ObjectOutputStream(host_sk.getOutputStream());
-		DataInputStream host_din=new DataInputStream(host_sk.getInputStream());
-		DataOutputStream host_dout=new DataOutputStream(host_sk.getOutputStream());
+		host_oout.flush();
+		ObjectInputStream host_oin=new ObjectInputStream(host_sk.getInputStream());
+		
+		
 		
 		host_oout.writeObject(new Packet(MsgType.INTEREST,filename));
 		host_oout.flush();
@@ -130,34 +133,44 @@ public class SwitchClientsHandler implements Runnable{
 		}
 		else
 		{
-			oout.writeObject(new Packet(MsgType.SUCCESS,null));
+			oout.writeObject(new Packet(MsgType.SUCCESS,pkt.data));
 			oout.flush();
 			
-			byte[] arr = new byte[16*1024];
+			byte[] arr = new byte[1024];
 			
-			int n;
 			
-			while((n=host_din.read(arr))>0)
-			{
-				dout.write(arr,0,n);
+			long size=Integer.parseInt(pkt.data);
+			
+			
+			long chunks= size/1024;
+			int lastChunk=(int)(size-(chunks*1024));
+			for (long i = 0; i < chunks; i++) {
+			    host_oin.read(arr);
+				
+				
+			    oout.write(arr);
 			}
+			host_oin.read(arr,0,lastChunk);
+			oout.write(arr);
 			
-			dout.flush();
+			
+			host_oout.flush();
+			oout.flush();
+			
+			System.out.println("File written");
+			
 		}
 		host_oin.close();
-		host_oout.close();
-		host_din.close();
-		host_dout.close();
+		//host_oout.close();
 		host_sk.close();
 	}
 	
-	public void closeStreams() throws IOException
+	public void closeStreams() throws EOFException, IOException
 	{
-		oin.close();
-		oout.close();
-		din.close();
-		dout.close();
 		
+		//oout.close();
+		oin.close();
+		sk.close();
 		
 	}
 	
@@ -171,14 +184,26 @@ public class SwitchClientsHandler implements Runnable{
 				Packet pkt=(Packet)oin.readObject();
 				handlePacket(pkt);
 				
-			} catch (ClassNotFoundException | IOException e) {
+			}catch (EOFException e)
+			{
+				System.err.append("Connection lost with "+sk.getInetAddress().getHostAddress()+"\n");
+				break;
+			}
+			
+			catch (ClassNotFoundException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			
 		}
-		
+		try {
+			closeStreams();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	protected void finalize() throws Throwable

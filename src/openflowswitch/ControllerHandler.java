@@ -74,7 +74,6 @@ public class ControllerHandler {
 		
 		try{
 			oout.close();
-			oin.close();
 			controllerSocket.close();
 		}
 		finally

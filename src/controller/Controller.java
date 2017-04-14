@@ -72,7 +72,7 @@ public class Controller {
 		List<ContentInfo> l=map.get(content);
 		
 		ContentInfo info;
-		
+		/*this loop is to be corrected*/
 		for(Iterator<ContentInfo> iter=l.iterator();iter.hasNext();)
 		{
 			info=iter.next();
