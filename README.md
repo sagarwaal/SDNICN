@@ -35,11 +35,10 @@ REPLY (not used)
 
 
 Packet here is a java object with following attributes:
-MSGTyp
-addr
-data
+MSGTyp,
+addr,
+data,
 Serial version UID
-
 
 For running application, you can build a executable jar file. On running that file, application will ask you to choose mode. 
 
