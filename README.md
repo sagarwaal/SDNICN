@@ -25,7 +25,7 @@ For retrieving a file, host starts a file receiver thread, which creates a conne
 Host also starts a server thread to listen requests for the content published by this host.
 
 
-MESSAGE TYPES are defined in java class util/MsgTyp.java 
+MESSAGE TYPES are defined in java class util/MsgTyp.java.Following are types of messages:-
 SUCCESS,
 NOTFOUND,
 PUBLISH,
