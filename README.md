@@ -30,8 +30,8 @@ SUCCESS,
 NOTFOUND,
 PUBLISH,
 INTEREST,
-REQUEST, //not used
-REPLY   // not used
+REQUEST(not used)
+REPLY (not used)
 
 
 Packet here is a java object with following attributes:
